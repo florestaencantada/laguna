@@ -1,0 +1,105 @@
+[build-system]
+requires = ["hatchling>=1.25.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "arborea"
+version = "0.1.0"
+description = "Framework de desenvolvimento para agentes de IA"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { file = "LICENSE" }
+authors = [{ name = "Arborea Authors" }]
+keywords = ["ai", "agents", "framework", "arborea"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Typing :: Typed",
+]
+dependencies = [
+  "pydantic>=2.9.2",
+  "typing-extensions>=4.12.2",
+]
+
+[project.scripts]
+arborea = "arborea.cli:main"
+
+[project.urls]
+Homepage = "https://example.com/arborea"
+Repository = "https://example.com/arborea"
+
+# Use dependency groups for dev & docs (consumed by uv sync --all-groups)
+[dependency-groups]
+dev = [
+  "ruff>=0.6.9",
+  "mypy>=1.11.2",
+  "pytest>=8.3.3",
+  "pytest-cov>=5.0.0",
+  "coverage[toml]>=7.6.1",
+  "pre-commit>=3.8.0",
+  "build>=1.2.2.post1",
+  "twine>=5.1.1",
+]
+docs = [
+  "mkdocs>=1.6.1",
+  "mkdocs-material>=9.5.36",
+  "mkdocstrings[python]>=0.25.2",
+]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/arborea"]
+# Ensure py.typed is shipped in the wheel (PEP 561)
+include = ["src/arborea/py.typed"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+preview = true
+exclude = ["tests/data"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "PERF"]
+ignore = ["E203"]
+fixable = ["ALL"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"
+skip-magic-trailing-comma = false
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_unused_configs = true
+warn_unreachable = true
+disallow_any_generics = true
+disallow_subclassing_any = false
+disallow_untyped_defs = true
+no_implicit_optional = true
+show_error_codes = true
+pretty = true
+plugins = ["pydantic.mypy"]
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = "-ra -q --cov=arborea --cov-report=term-missing"
+testpaths = ["tests"]
+
+[tool.coverage.run]
+branch = true
+source = ["arborea"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+precision = 1
